@@ -1,9 +1,9 @@
 <?php
 /**
- * Classe de gestion de l'interface d'administration
+ * Classe de gestion de l'interface d'administration - VERSION CORRIGÉE
  * 
  * @package GestionAdherents
- * @version 1.0.0
+ * @version 1.1.1
  */
 
 // Sécurité : empêcher l'accès direct
@@ -47,7 +47,7 @@ class GA_Admin {
             </a>
             
             <?php
-            // Afficher les messages de succès
+            // Afficher les messages de succès/erreur
             if (isset($_GET['message'])) {
                 $message_type = sanitize_text_field($_GET['message']);
                 switch ($message_type) {
@@ -56,9 +56,19 @@ class GA_Admin {
                         echo '<p><strong>' . __('Adhérent sauvegardé avec succès !', 'gestion-adherents') . '</strong></p>';
                         echo '</div>';
                         break;
+                    case 'updated':
+                        echo '<div class="notice notice-success is-dismissible">';
+                        echo '<p><strong>' . __('Adhérent mis à jour avec succès !', 'gestion-adherents') . '</strong></p>';
+                        echo '</div>';
+                        break;
                     case 'deleted':
                         echo '<div class="notice notice-success is-dismissible">';
                         echo '<p><strong>' . __('Adhérent supprimé avec succès !', 'gestion-adherents') . '</strong></p>';
+                        echo '</div>';
+                        break;
+                    case 'error':
+                        echo '<div class="notice notice-error is-dismissible">';
+                        echo '<p><strong>' . __('Une erreur est survenue lors de l\'opération.', 'gestion-adherents') . '</strong></p>';
                         echo '</div>';
                         break;
                 }
@@ -175,22 +185,24 @@ class GA_Admin {
     }
     
     /**
-     * Afficher le formulaire d'ajout/modification d'adhérent
+     * Afficher le formulaire d'ajout/modification d'adhérent - VERSION CORRIGÉE
      */
     public function display_add_adherent_form() {
         $adherent_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $adherent = null;
+        $is_update = false;
         
         if ($adherent_id) {
             $database = new GA_Database();
             $adherent = $database->get_adherent($adherent_id);
+            $is_update = true;
             
             if (!$adherent) {
                 wp_die(__('Adhérent non trouvé.', 'gestion-adherents'));
             }
         }
         
-        // Traitement du formulaire
+        // Traitement du formulaire - LOGIQUE CORRIGÉE
         if ($_POST && wp_verify_nonce($_POST['ga_nonce'], 'ga_adherent_form')) {
             $sanitizer = new GA_Sanitizer();
             $validator = new GA_Validator();
@@ -203,15 +215,17 @@ class GA_Admin {
                 $result = $database->save_adherent($data);
                 
                 if ($result) {
-                    // Redirection vers la liste avec message de succès
+                    // Redirection avec message de succès - CORRECTION PRINCIPALE
+                    $message_type = $is_update ? 'updated' : 'saved';
                     $redirect_url = add_query_arg(
                         array(
                             'page' => 'gestion-adherents',
-                            'message' => 'saved',
-                            'adherent_id' => $result
+                            'message' => $message_type
                         ),
                         admin_url('admin.php')
                     );
+                    
+                    // Redirection immédiate
                     wp_redirect($redirect_url);
                     exit;
                 } else {
@@ -224,7 +238,7 @@ class GA_Admin {
         
         ?>
         <div class="wrap">
-            <h1><?php echo $adherent_id ? __('Modifier l\'adhérent', 'gestion-adherents') : __('Ajouter un adhérent', 'gestion-adherents'); ?></h1>
+            <h1><?php echo $is_update ? __('Modifier l\'adhérent', 'gestion-adherents') : __('Ajouter un adhérent', 'gestion-adherents'); ?></h1>
             
             <?php if (isset($error_message)): ?>
                 <div class="notice notice-error"><p><?php echo esc_html($error_message); ?></p></div>
@@ -476,7 +490,7 @@ class GA_Admin {
                 </table>
                 
                 <p class="submit">
-                    <input type="submit" name="submit" class="button-primary" value="<?php echo $adherent_id ? __('Mettre à jour', 'gestion-adherents') : __('Ajouter l\'adhérent', 'gestion-adherents'); ?>">
+                    <input type="submit" name="submit" class="button-primary" value="<?php echo $is_update ? __('Mettre à jour', 'gestion-adherents') : __('Ajouter l\'adhérent', 'gestion-adherents'); ?>">
                     <a href="<?php echo admin_url('admin.php?page=gestion-adherents'); ?>" class="button"><?php _e('Annuler', 'gestion-adherents'); ?></a>
                 </p>
             </form>
@@ -562,28 +576,3 @@ class GA_Admin {
                         </tr>
                     </tbody>
                 </table>
-                
-                <p class="submit">
-                    <input type="submit" name="submit" class="button-primary" value="<?php _e('Enregistrer les paramètres', 'gestion-adherents'); ?>">
-                </p>
-            </form>
-        </div>
-        <?php
-    }
-    
-    /**
-     * Afficher la page d'export
-     */
-    public function display_export_page() {
-        ?>
-        <div class="wrap">
-            <h1><?php _e('Export des Adhérents', 'gestion-adherents'); ?></h1>
-            <div class="notice notice-info">
-                <p><strong><?php _e('Fonctionnalité en développement', 'gestion-adherents'); ?></strong></p>
-                <p><?php _e('L\'export CSV/Excel sera disponible dans une prochaine version du plugin.', 'gestion-adherents'); ?></p>
-                <p><?php _e('En attendant, vous pouvez consulter et gérer vos adhérents depuis la liste principale.', 'gestion-adherents'); ?></p>
-            </div>
-        </div>
-        <?php
-    }
-}
