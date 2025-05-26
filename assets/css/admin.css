@@ -1,0 +1,387 @@
+/* assets/css/admin.css */
+
+/* Styles généraux pour le plugin Gestion Adhérents */
+
+/* === NUMÉRO DE LICENCE === */
+.ga-license-number {
+    background-color: #f0f6fc;
+    color: #0073aa;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 12px;
+    border: 1px solid #c3e6cb;
+}
+
+.ga-no-license {
+    color: #999;
+    font-style: italic;
+}
+
+/* === BADGES ET STATUTS === */
+.ga-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.ga-badge-yes {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.ga-badge-no {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.ga-status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    min-width: 60px;
+}
+
+.ga-status-active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.ga-status-inactive {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.ga-status-suspended {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* === FILTRES === */
+.ga-filters {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.ga-filters .search-box {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.ga-filters input[type="search"] {
+    min-width: 200px;
+}
+
+.ga-filters select {
+    min-width: 150px;
+}
+
+/* === TABLEAU === */
+.wp-list-table .column-actions {
+    width: 120px;
+}
+
+.wp-list-table .ga-delete-adherent {
+    color: #b32d2e;
+}
+
+.wp-list-table .ga-delete-adherent:hover {
+    color: #d63638;
+}
+
+/* === FORMULAIRE D'ADHÉRENT === */
+.ga-adherent-form .form-table {
+    max-width: 800px;
+}
+
+.ga-adherent-form .form-table th {
+    width: 200px;
+    padding-left: 0;
+}
+
+.ga-adherent-form .form-table td {
+    padding-bottom: 15px;
+}
+
+.ga-adherent-form .required {
+    color: #d63638;
+    font-weight: bold;
+}
+
+.ga-adherent-form .error {
+    color: #d63638;
+    font-size: 12px;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.ga-adherent-form h3 {
+    margin: 20px 0 10px 0;
+    padding: 10px 0 8px 0;
+    border-bottom: 2px solid #2271b1;
+    color: #2271b1;
+    font-size: 16px;
+}
+
+.ga-adherent-form .form-table tr:first-child h3 {
+    margin-top: 0;
+}
+
+/* Styles pour les champs groupés */
+.ga-field-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.ga-field-group .field-half {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* === NOTICES ET MESSAGES === */
+.ga-notice {
+    padding: 12px;
+    margin: 15px 0;
+    border-left: 4px solid;
+    background: #fff;
+}
+
+.ga-notice-success {
+    border-left-color: #00a32a;
+    background-color: #f0f6fc;
+}
+
+.ga-notice-error {
+    border-left-color: #d63638;
+    background-color: #fcf0f1;
+}
+
+.ga-notice-warning {
+    border-left-color: #dba617;
+    background-color: #fcf9e8;
+}
+
+/* === BOUTONS === */
+.ga-btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.ga-btn-secondary {
+    background: #f6f7f7;
+    border-color: #dcdcde;
+    color: #50575e;
+}
+
+.ga-btn-secondary:hover {
+    background: #f0f0f1;
+    border-color: #c3c4c7;
+}
+
+/* === RESPONSIVE === */
+@media screen and (max-width: 782px) {
+    .ga-filters .search-box {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .ga-filters input[type="search"],
+    .ga-filters select {
+        min-width: unset;
+        width: 100%;
+    }
+    
+    .ga-field-group {
+        flex-direction: column;
+    }
+    
+    .wp-list-table .column-actions {
+        text-align: left !important;
+    }
+}
+
+/* === MODAL / POPUP === */
+.ga-modal {
+    display: none;
+    position: fixed;
+    z-index: 100000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.ga-modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 4px;
+    width: 80%;
+    max-width: 500px;
+    position: relative;
+}
+
+.ga-modal-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    cursor: pointer;
+}
+
+.ga-modal-close:hover,
+.ga-modal-close:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+/* === STATISTIQUES (pour tableau de bord futur) === */
+.ga-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.ga-stat-card {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+}
+
+.ga-stat-number {
+    font-size: 32px;
+    font-weight: 600;
+    color: #2271b1;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.ga-stat-label {
+    font-size: 14px;
+    color: #646970;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* === LOADING ET ANIMATIONS === */
+.ga-loading {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+}
+
+.ga-loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #2271b1;
+    border-radius: 50%;
+    animation: ga-spin 1s linear infinite;
+}
+
+@keyframes ga-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* === EXPORT === */
+.ga-export-form .form-table label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.ga-export-form .form-table input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* === ACCESSIBILITY === */
+.screen-reader-text {
+    clip: rect(1px, 1px, 1px, 1px);
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+}
+
+/* Focus styles */
+.ga-adherent-form input:focus,
+.ga-adherent-form select:focus,
+.ga-adherent-form textarea:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: 2px solid transparent;
+}
+
+/* === CUSTOM SCROLLBAR === */
+.ga-adherent-form::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ga-adherent-form::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.ga-adherent-form::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.ga-adherent-form::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* === PRINT STYLES === */
+@media print {
+    .ga-filters,
+    .page-title-action,
+    .wp-list-table .column-actions,
+    .tablenav {
+        display: none !important;
+    }
+    
+    .wrap {
+        margin: 0;
+    }
+    
+    .wp-list-table {
+        border-collapse: collapse;
+    }
+    
+    .wp-list-table th,
+    .wp-list-table td {
+        border: 1px solid #000;
+        padding: 8px !important;
+    }
+}

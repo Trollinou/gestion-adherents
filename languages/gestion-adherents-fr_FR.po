@@ -1,0 +1,529 @@
+# languages/gestion-adherents-fr_FR.po
+# French translation for Gestion Adhérents WordPress Plugin
+
+msgid ""
+msgstr ""
+"Project-Id-Version: Gestion Adhérents 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-01 12:00+0000\n"
+"PO-Revision-Date: 2025-01-01 12:00+0000\n"
+"Last-Translator: Etienne Gagnon\n"
+"Language-Team: \n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"X-Poedit-KeywordsList: __;_e;_n;_x;_ex;_nx;esc_attr__;esc_attr_e;esc_html__;esc_html_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+# === MESSAGES GÉNÉRAUX ===
+msgid "Gestion d'Adhérents"
+msgstr "Gestion d'Adhérents"
+
+msgid "Member Management"
+msgstr "Gestion d'Adhérents"
+
+msgid "Members"
+msgstr "Adhérents"
+
+msgid "All members"
+msgstr "Tous les adhérents"
+
+msgid "Add member"
+msgstr "Ajouter un adhérent"
+
+msgid "Add"
+msgstr "Ajouter"
+
+msgid "Settings"
+msgstr "Paramètres"
+
+msgid "Export"
+msgstr "Export"
+
+msgid "You do not have sufficient permissions."
+msgstr "Vous n'avez pas les permissions suffisantes."
+
+msgid "Insufficient permissions."
+msgstr "Permissions insuffisantes."
+
+msgid "Security error."
+msgstr "Erreur de sécurité."
+
+msgid "Invalid member ID."
+msgstr "ID adhérent invalide."
+
+msgid "Member not found."
+msgstr "Adhérent non trouvé."
+
+msgid "An error occurred."
+msgstr "Une erreur est survenue."
+
+msgid "Member saved successfully."
+msgstr "Adhérent sauvegardé avec succès."
+
+msgid "Member deleted successfully."
+msgstr "Adhérent supprimé avec succès."
+
+msgid "Error during save."
+msgstr "Erreur lors de la sauvegarde."
+
+msgid "Error during deletion."
+msgstr "Erreur lors de la suppression."
+
+msgid "Are you sure you want to delete this member?"
+msgstr "Êtes-vous sûr de vouloir supprimer cet adhérent ?"
+
+# === CHAMPS DE FORMULAIRE ===
+msgid "Last name"
+msgstr "Nom"
+
+msgid "First name"
+msgstr "Prénom"
+
+msgid "Birth date"
+msgstr "Date de naissance"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Numéro de licence"
+msgstr "Numéro de licence"
+
+msgid "N° Licence"
+msgstr "N° Licence"
+
+msgid "Format : 1 lettre suivie de 5 chiffres (ex: A12345)"
+msgstr "Format : 1 lettre suivie de 5 chiffres (ex: A12345)"
+
+msgid "Le numéro de licence doit contenir une lettre suivie de 5 chiffres (ex: A12345)."
+msgstr "Le numéro de licence doit contenir une lettre suivie de 5 chiffres (ex: A12345)."
+
+msgid "Ce numéro de licence est déjà utilisé par un autre adhérent."
+msgstr "Ce numéro de licence est déjà utilisé par un autre adhérent."
+
+msgid "Address 1"
+msgstr "Adresse 1"
+
+msgid "Address 2"
+msgstr "Adresse 2"
+
+msgid "Address 3"
+msgstr "Adresse 3"
+
+msgid "Postal code"
+msgstr "Code postal"
+
+msgid "City"
+msgstr "Ville"
+
+msgid "Phone number"
+msgstr "Numéro de téléphone"
+
+msgid "Phone"
+msgstr "Téléphone"
+
+msgid "Membership date"
+msgstr "Date d'adhésion"
+
+msgid "End membership date"
+msgstr "Date de fin d'adhésion"
+
+msgid "Junior"
+msgstr "Junior"
+
+msgid "Excellence Center"
+msgstr "Pôle Excellence"
+
+msgid "WordPress User"
+msgstr "Utilisateur WordPress"
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "Actions"
+msgstr "Actions"
+
+# === STATUTS ===
+msgid "Active"
+msgstr "Actif"
+
+msgid "Inactive"
+msgstr "Inactif"
+
+msgid "Suspended"
+msgstr "Suspendu"
+
+msgid "Yes"
+msgstr "Oui"
+
+msgid "No"
+msgstr "Non"
+
+# === MESSAGES DE VALIDATION ===
+msgid "The last name must contain at least 2 characters."
+msgstr "Le nom doit contenir au moins 2 caractères."
+
+msgid "The first name must contain at least 2 characters."
+msgstr "Le prénom doit contenir au moins 2 caractères."
+
+msgid "Invalid email address."
+msgstr "Adresse email invalide."
+
+msgid "This email address is already in use."
+msgstr "Cette adresse email est déjà utilisée."
+
+msgid "Invalid birth date."
+msgstr "Date de naissance invalide."
+
+msgid "Valid membership date required."
+msgstr "Date d'adhésion requise et valide."
+
+msgid "Invalid end membership date."
+msgstr "Date de fin d'adhésion invalide."
+
+msgid "The end date must be after the membership date."
+msgstr "La date de fin doit être postérieure à la date d'adhésion."
+
+msgid "Invalid phone number."
+msgstr "Numéro de téléphone invalide."
+
+msgid "Invalid postal code."
+msgstr "Code postal invalide."
+
+msgid "Invalid WordPress user."
+msgstr "Utilisateur WordPress invalide."
+
+msgid "Invalid data."
+msgstr "Données invalides."
+
+# === SECTIONS DE FORMULAIRE ===
+msgid "Personal information"
+msgstr "Informations personnelles"
+
+msgid "Contact"
+msgstr "Contact"
+
+msgid "Address"
+msgstr "Adresse"
+
+msgid "Membership"
+msgstr "Adhésion"
+
+msgid "Classifications"
+msgstr "Classifications"
+
+msgid "WordPress Account"
+msgstr "Compte WordPress"
+
+msgid "This member is classified as Junior"
+msgstr "Cet adhérent est classé comme Junior"
+
+msgid "This member is part of Excellence Center"
+msgstr "Cet adhérent fait partie du Pôle Excellence"
+
+msgid "No linked account"
+msgstr "Aucun compte lié"
+
+# === PAGES D'ADMINISTRATION ===
+
+msgid "Add a member"
+msgstr "Ajouter un adhérent"
+
+msgid "Search..."
+msgstr "Rechercher..."
+
+msgid "All statuses"
+msgstr "Tous les statuts"
+
+msgid "Junior - All"
+msgstr "Junior - Tous"
+
+msgid "Junior - Yes"
+msgstr "Junior - Oui"
+
+msgid "Junior - No"
+msgstr "Junior - Non"
+
+msgid "Excellence Center - All"
+msgstr "Pôle Excellence - Tous"
+
+msgid "Excellence Center - Yes"
+msgstr "Pôle Excellence - Oui"
+
+msgid "Excellence Center - No"
+msgstr "Pôle Excellence - Non"
+
+msgid "Filter"
+msgstr "Filtrer"
+
+msgid "No member found."
+msgstr "Aucun adhérent trouvé."
+
+msgid "Edit member"
+msgstr "Modifier l'adhérent"
+
+msgid "Edit"
+msgstr "Modifier"
+
+msgid "Delete"
+msgstr "Supprimer"
+
+msgid "WP Account: %s"
+msgstr "Compte WP: %s"
+
+msgid "End: %s"
+msgstr "Fin: %s"
+
+# === FORMULAIRES ===
+msgid "Update"
+msgstr "Mettre à jour"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+# === PARAMÈTRES ===
+msgid "Settings - Member Management"
+msgstr "Paramètres - Gestion Adhérents"
+
+msgid "Items per page"
+msgstr "Éléments par page"
+
+msgid "Number of members to display per page in the list."
+msgstr "Nombre d'adhérents à afficher par page dans la liste."
+
+msgid "Date format"
+msgstr "Format de date"
+
+msgid "Notification email"
+msgstr "Email de notification"
+
+msgid "Email address to receive plugin notifications."
+msgstr "Adresse email pour recevoir les notifications du plugin."
+
+msgid "Automatic notifications"
+msgstr "Notifications automatiques"
+
+msgid "Send notification for memberships expiring soon"
+msgstr "Envoyer une notification pour les adhésions qui expirent bientôt"
+
+msgid "Default export format"
+msgstr "Format d'export par défaut"
+
+msgid "Save settings"
+msgstr "Enregistrer les paramètres"
+
+msgid "Settings saved."
+msgstr "Paramètres sauvegardés."
+
+# === EXPORT ===
+msgid "Member Export"
+msgstr "Export des Adhérents"
+
+msgid "Export format"
+msgstr "Format d'export"
+
+msgid "CSV"
+msgstr "CSV"
+
+msgid "Excel (XLSX)"
+msgstr "Excel (XLSX)"
+
+msgid "Filters"
+msgstr "Filtres"
+
+msgid "Active members"
+msgstr "Adhérents actifs"
+
+msgid "Inactive members"
+msgstr "Adhérents inactifs"
+
+msgid "Suspended members"
+msgstr "Adhérents suspendus"
+
+msgid "Include Junior classification"
+msgstr "Inclure la classification Junior"
+
+msgid "Include Excellence Center classification"
+msgstr "Inclure la classification Pôle Excellence"
+
+msgid "Fields to export"
+msgstr "Champs à exporter"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Complete address"
+msgstr "Adresse complète"
+
+msgid "Download export"
+msgstr "Télécharger l'export"
+
+msgid "No data to export."
+msgstr "Aucune donnée à exporter."
+
+# === NOTIFICATIONS ===
+msgid "Member successfully created."
+msgstr "Adhérent créé avec succès."
+
+msgid "Member successfully updated."
+msgstr "Adhérent mis à jour avec succès."
+
+msgid "Changes saved successfully."
+msgstr "Modifications sauvegardées avec succès."
+
+msgid "Operation completed successfully."
+msgstr "Opération terminée avec succès."
+
+msgid "Warning: This action cannot be undone."
+msgstr "Attention : Cette action ne peut pas être annulée."
+
+msgid "Confirm deletion"
+msgstr "Confirmer la suppression"
+
+msgid "Are you sure you want to delete %s?"
+msgstr "Êtes-vous sûr de vouloir supprimer %s ?"
+
+# === PAGINATION ===
+msgid "Previous"
+msgstr "Précédent"
+
+msgid "Next"
+msgstr "Suivant"
+
+msgid "First"
+msgstr "Premier"
+
+msgid "Last"
+msgstr "Dernier"
+
+msgid "Page %d of %d"
+msgstr "Page %d sur %d"
+
+msgid "Showing %d to %d of %d entries"
+msgstr "Affichage de %d à %d sur %d entrées"
+
+# === STATISTIQUES ===
+msgid "Total Members"
+msgstr "Total des Adhérents"
+
+msgid "Active Members"
+msgstr "Adhérents Actifs"
+
+msgid "Junior Members"
+msgstr "Adhérents Junior"
+
+msgid "Excellence Center Members"
+msgstr "Adhérents Pôle Excellence"
+
+msgid "New this month"
+msgstr "Nouveaux ce mois"
+
+msgid "Expiring soon"
+msgstr "Expirent bientôt"
+
+# === ACTIONS GROUPÉES ===
+msgid "Bulk Actions"
+msgstr "Actions groupées"
+
+msgid "Select all"
+msgstr "Tout sélectionner"
+
+msgid "Delete selected"
+msgstr "Supprimer la sélection"
+
+msgid "Export selected"
+msgstr "Exporter la sélection"
+
+msgid "%d member(s) updated"
+msgstr "%d adhérent(s) mis à jour"
+
+msgid "%d member(s) deleted"
+msgstr "%d adhérent(s) supprimés"
+
+# === AIDE ===
+msgid "Loading..."
+msgstr "Chargement..."
+
+msgid "Please wait"
+msgstr "Veuillez patienter"
+
+msgid "End of list"
+msgstr "Fin de la liste"
+
+msgid "No more results"
+msgstr "Aucun autre résultat"
+
+msgid "Required field"
+msgstr "Champ obligatoire"
+
+msgid "Optional field"
+msgstr "Champ optionnel"
+
+msgid "Format: DD/MM/YYYY"
+msgstr "Format : JJ/MM/AAAA"
+
+msgid "Format: +33 1 23 45 67 89"
+msgstr "Format : +33 1 23 45 67 89"
+
+msgid "Format: 75001"
+msgstr "Format : 75001"
+
+msgid "Leave empty if no end date"
+msgstr "Laisser vide si pas de date de fin"
+
+msgid "Click to select"
+msgstr "Cliquer pour sélectionner"
+
+msgid "Type to search"
+msgstr "Taper pour rechercher"
+
+msgid "No results found"
+msgstr "Aucun résultat trouvé"
+
+# === DIVERS ===
+msgid "Sélectionnez \"Aucun compte lié\" pour délier l'adhérent d'un compte WordPress."
+msgstr "Sélectionnez \"Aucun compte lié\" pour délier l'adhérent d'un compte WordPress."
+
+msgid "Adhérent sauvegardé avec succès !"
+msgstr "Adhérent sauvegardé avec succès !"
+
+msgid "Adhérent supprimé avec succès !"
+msgstr "Adhérent supprimé avec succès !"
+
+msgid "Success"
+msgstr "Succès"
+
+msgid "Warning"
+msgstr "Avertissement"
+
+msgid "Error"
+msgstr "Erreur"
+
+msgid "Information"
+msgstr "Information"
+
+msgid "Close"
+msgstr "Fermer"
+
+msgid "Continue"
+msgstr "Continuer"
+
+msgid "Back"
+msgstr "Retour"
+
+msgid "Done"
+msgstr "Terminé"
+
+msgid "Processing..."
+msgstr "Traitement en cours..."
+
+msgid "Complete"
+msgstr "Terminé"
+
+msgid "Thank you for using Member Management!"
+msgstr "Merci d'utiliser Gestion d'Adhérents !"
+
+# Fin du fichier de traduction - Version concise mais complète
