@@ -1,4 +1,4 @@
-/* assets/js/admin.js */
+/* assets/js/admin.js - VERSION COMPLÈTE CORRIGÉE */
 
 (function($) {
     'use strict';
@@ -23,8 +23,8 @@
             // Suppression d'adhérent
             $(document).on('click', '.ga-delete-adherent', this.confirmDelete);
             
-            // Soumission de formulaire via AJAX
-            $('.ga-adherent-form').on('submit', this.handleFormSubmit);
+            // Soumission de formulaire via AJAX (optionnel)
+            $('.ga-adherent-form.ga-ajax-form').on('submit', this.handleFormSubmit);
             
             // Recherche en temps réel (avec délai)
             var searchTimeout;
@@ -32,7 +32,7 @@
                 clearTimeout(searchTimeout);
                 var $form = $(this).closest('form');
                 searchTimeout = setTimeout(function() {
-                    // Auto-submit après 500ms d'inactivité
+                    // Auto-submit après 500ms d'inactivité (optionnel)
                     // $form.submit();
                 }, 500);
             });
@@ -54,6 +54,11 @@
             
             // Confirmation avant export important
             $('.ga-export-form').on('submit', this.confirmExport);
+            
+            // Auto-dismiss des notices après 5 secondes
+            setTimeout(function() {
+                $('.notice.is-dismissible').not('.persistent').fadeOut();
+            }, 5000);
         },
         
         /**
@@ -147,7 +152,7 @@
         },
         
         /**
-         * Gestion de soumission de formulaire
+         * Gestion de soumission de formulaire AJAX (optionnel)
          */
         handleFormSubmit: function(e) {
             var $form = $(this);
@@ -216,47 +221,7 @@
             switch (fieldName) {
                 case 'email':
                     if (value && !GestionAdherents.isValidEmail(value)) {
-                        isValidPostalCode: function(code) {
-            return /^\d{5}$/.test(code);
-        },
-        
-        isValidLicense: function(license) {
-            // 1 lettre suivie de 5 chiffres
-            return /^[A-Z][0-9]{5}$/.test(license.toUpperCase());
-        },
-        
-        isValidDate: function(dateString) {
-            var date = new Date(dateString);
-            return date instanceof Date && !isNaN(date);
-        },
-        
-        /**
-         * Calcul de l'âge
-         */
-        calculateAge: function(birthDate) {
-            var today = new Date();
-            var age = today.getFullYear() - birthDate.getFullYear();
-            var monthDiff = today.getMonth() - birthDate.getMonth();
-            
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
-            }
-            
-            return age;
-        }
-    };
-    
-    /**
-     * Initialisation au chargement de la page
-     */
-    $(document).ready(function() {
-        GestionAdherents.init();
-    });
-    
-    // Exposer l'objet pour usage externe si nécessaire
-    window.GestionAdherents = GestionAdherents;
-    
-})(jQuery);Valid = false;
+                        isValid = false;
                         errorMessage = 'Adresse email invalide.';
                     }
                     break;
@@ -653,6 +618,11 @@
         
         isValidPostalCode: function(code) {
             return /^\d{5}$/.test(code);
+        },
+        
+        isValidLicense: function(license) {
+            // 1 lettre suivie de 5 chiffres
+            return /^[A-Z][0-9]{5}$/.test(license.toUpperCase());
         },
         
         isValidDate: function(dateString) {
