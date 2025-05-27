@@ -1,9 +1,9 @@
 <?php
 /**
- * Classe de gestion de l'interface d'administration - VERSION CORRIGÉE
+ * Classe de gestion de l'interface d'administration
  * 
  * @package GestionAdherents
- * @version 1.1.1
+ * @version 1.0.0
  */
 
 // Sécurité : empêcher l'accès direct
@@ -47,7 +47,7 @@ class GA_Admin {
             </a>
             
             <?php
-            // Afficher les messages de succès/erreur
+            // Afficher les messages de succès
             if (isset($_GET['message'])) {
                 $message_type = sanitize_text_field($_GET['message']);
                 switch ($message_type) {
@@ -56,19 +56,9 @@ class GA_Admin {
                         echo '<p><strong>' . __('Adhérent sauvegardé avec succès !', 'gestion-adherents') . '</strong></p>';
                         echo '</div>';
                         break;
-                    case 'updated':
-                        echo '<div class="notice notice-success is-dismissible">';
-                        echo '<p><strong>' . __('Adhérent mis à jour avec succès !', 'gestion-adherents') . '</strong></p>';
-                        echo '</div>';
-                        break;
                     case 'deleted':
                         echo '<div class="notice notice-success is-dismissible">';
                         echo '<p><strong>' . __('Adhérent supprimé avec succès !', 'gestion-adherents') . '</strong></p>';
-                        echo '</div>';
-                        break;
-                    case 'error':
-                        echo '<div class="notice notice-error is-dismissible">';
-                        echo '<p><strong>' . __('Une erreur est survenue lors de l\'opération.', 'gestion-adherents') . '</strong></p>';
                         echo '</div>';
                         break;
                 }
@@ -185,24 +175,22 @@ class GA_Admin {
     }
     
     /**
-     * Afficher le formulaire d'ajout/modification d'adhérent - VERSION CORRIGÉE
+     * Afficher le formulaire d'ajout/modification d'adhérent
      */
     public function display_add_adherent_form() {
         $adherent_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $adherent = null;
-        $is_update = false;
         
         if ($adherent_id) {
             $database = new GA_Database();
             $adherent = $database->get_adherent($adherent_id);
-            $is_update = true;
             
             if (!$adherent) {
                 wp_die(__('Adhérent non trouvé.', 'gestion-adherents'));
             }
         }
         
-        // Traitement du formulaire - LOGIQUE CORRIGÉE
+        // Traitement du formulaire
         if ($_POST && wp_verify_nonce($_POST['ga_nonce'], 'ga_adherent_form')) {
             $sanitizer = new GA_Sanitizer();
             $validator = new GA_Validator();
@@ -215,17 +203,15 @@ class GA_Admin {
                 $result = $database->save_adherent($data);
                 
                 if ($result) {
-                    // Redirection avec message de succès - CORRECTION PRINCIPALE
-                    $message_type = $is_update ? 'updated' : 'saved';
+                    // Redirection vers la liste avec message de succès
                     $redirect_url = add_query_arg(
                         array(
                             'page' => 'gestion-adherents',
-                            'message' => $message_type
+                            'message' => 'saved',
+                            'adherent_id' => $result
                         ),
                         admin_url('admin.php')
                     );
-                    
-                    // Redirection immédiate
                     wp_redirect($redirect_url);
                     exit;
                 } else {
@@ -238,7 +224,7 @@ class GA_Admin {
         
         ?>
         <div class="wrap">
-            <h1><?php echo $is_update ? __('Modifier l\'adhérent', 'gestion-adherents') : __('Ajouter un adhérent', 'gestion-adherents'); ?></h1>
+            <h1><?php echo $adherent_id ? __('Modifier l\'adhérent', 'gestion-adherents') : __('Ajouter un adhérent', 'gestion-adherents'); ?></h1>
             
             <?php if (isset($error_message)): ?>
                 <div class="notice notice-error"><p><?php echo esc_html($error_message); ?></p></div>
@@ -490,7 +476,7 @@ class GA_Admin {
                 </table>
                 
                 <p class="submit">
-                    <input type="submit" name="submit" class="button-primary" value="<?php echo $is_update ? __('Mettre à jour', 'gestion-adherents') : __('Ajouter l\'adhérent', 'gestion-adherents'); ?>">
+                    <input type="submit" name="submit" class="button-primary" value="<?php echo $adherent_id ? __('Mettre à jour', 'gestion-adherents') : __('Ajouter l\'adhérent', 'gestion-adherents'); ?>">
                     <a href="<?php echo admin_url('admin.php?page=gestion-adherents'); ?>" class="button"><?php _e('Annuler', 'gestion-adherents'); ?></a>
                 </p>
             </form>
@@ -574,19 +560,6 @@ class GA_Admin {
                                 </label>
                             </td>
                         </tr>
-                        
-                        <tr>
-                            <th scope="row">
-                                <label for="export_format"><?php _e('Format d\'export par défaut', 'gestion-adherents'); ?></label>
-                            </th>
-                            <td>
-                                <select id="export_format" name="export_format">
-                                    <option value="csv" <?php selected($settings['export_format'] ?? 'csv', 'csv'); ?>><?php _e('CSV', 'gestion-adherents'); ?></option>
-                                    <option value="xlsx" <?php selected($settings['export_format'] ?? '', 'xlsx'); ?>><?php _e('Excel (XLSX)', 'gestion-adherents'); ?></option>
-                                </select>
-                                <p class="description"><?php _e('Format utilisé par défaut pour les exports de données.', 'gestion-adherents'); ?></p>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
                 
@@ -599,426 +572,18 @@ class GA_Admin {
     }
     
     /**
-     * Afficher la page d'export - VERSION AMÉLIORÉE
+     * Afficher la page d'export
      */
     public function display_export_page() {
-        // Traitement de l'export si formulaire soumis
-        if ($_POST && wp_verify_nonce($_POST['ga_export_nonce'], 'ga_export_form')) {
-            $this->process_export();
-            return;
-        }
-        
-        $database = new GA_Database();
-        $stats = $this->get_export_stats();
-        
         ?>
         <div class="wrap">
             <h1><?php _e('Export des Adhérents', 'gestion-adherents'); ?></h1>
-            
             <div class="notice notice-info">
-                <p><strong><?php _e('Export des données', 'gestion-adherents'); ?></strong></p>
-                <p><?php printf(__('Vous pouvez exporter %d adhérents au total.', 'gestion-adherents'), $stats['total']); ?></p>
-            </div>
-            
-            <form method="post" class="ga-export-form">
-                <?php wp_nonce_field('ga_export_form', 'ga_export_nonce'); ?>
-                
-                <table class="form-table">
-                    <tbody>
-                        <!-- Format d'export -->
-                        <tr>
-                            <th scope="row">
-                                <label for="export_format"><?php _e('Format d\'export', 'gestion-adherents'); ?></label>
-                            </th>
-                            <td>
-                                <select id="export_format" name="export_format" class="regular-text">
-                                    <option value="csv"><?php _e('CSV (Comma Separated Values)', 'gestion-adherents'); ?></option>
-                                    <option value="xlsx"><?php _e('Excel (XLSX)', 'gestion-adherents'); ?></option>
-                                </select>
-                                <p class="description"><?php _e('Format du fichier à télécharger.', 'gestion-adherents'); ?></p>
-                            </td>
-                        </tr>
-                        
-                        <!-- Filtres par statut -->
-                        <tr>
-                            <th scope="row"><?php _e('Filtres par statut', 'gestion-adherents'); ?></th>
-                            <td>
-                                <fieldset>
-                                    <legend class="screen-reader-text"><?php _e('Sélectionner les statuts à inclure', 'gestion-adherents'); ?></legend>
-                                    <label>
-                                        <input type="checkbox" name="statuses[]" value="active" checked>
-                                        <?php _e('Adhérents actifs', 'gestion-adherents'); ?> 
-                                        <span class="description">(<?php echo $stats['active']; ?>)</span>
-                                    </label><br>
-                                    <label>
-                                        <input type="checkbox" name="statuses[]" value="inactive">
-                                        <?php _e('Adhérents inactifs', 'gestion-adherents'); ?>
-                                        <span class="description">(<?php echo $stats['inactive']; ?>)</span>
-                                    </label><br>
-                                    <label>
-                                        <input type="checkbox" name="statuses[]" value="suspended">
-                                        <?php _e('Adhérents suspendus', 'gestion-adherents'); ?>
-                                        <span class="description">(<?php echo $stats['suspended']; ?>)</span>
-                                    </label>
-                                </fieldset>
-                            </td>
-                        </tr>
-                        
-                        <!-- Filtres par classification -->
-                        <tr>
-                            <th scope="row"><?php _e('Filtres par classification', 'gestion-adherents'); ?></th>
-                            <td>
-                                <fieldset>
-                                    <legend class="screen-reader-text"><?php _e('Sélectionner les classifications à inclure', 'gestion-adherents'); ?></legend>
-                                    <label>
-                                        <input type="checkbox" name="include_junior" value="1" checked>
-                                        <?php _e('Inclure les adhérents Junior', 'gestion-adherents'); ?>
-                                        <span class="description">(<?php echo $stats['junior']; ?>)</span>
-                                    </label><br>
-                                    <label>
-                                        <input type="checkbox" name="include_pole_excellence" value="1" checked>
-                                        <?php _e('Inclure les adhérents Pôle Excellence', 'gestion-adherents'); ?>
-                                        <span class="description">(<?php echo $stats['pole_excellence']; ?>)</span>
-                                    </label>
-                                </fieldset>
-                            </td>
-                        </tr>
-                        
-                        <!-- Champs à exporter -->
-                        <tr>
-                            <th scope="row"><?php _e('Champs à exporter', 'gestion-adherents'); ?></th>
-                            <td>
-                                <fieldset>
-                                    <legend class="screen-reader-text"><?php _e('Sélectionner les champs à inclure dans l\'export', 'gestion-adherents'); ?></legend>
-                                    
-                                    <label>
-                                        <input type="checkbox" name="select_all_fields" id="select_all_fields">
-                                        <strong><?php _e('Sélectionner tous les champs', 'gestion-adherents'); ?></strong>
-                                    </label><br><br>
-                                    
-                                    <div style="columns: 2; column-gap: 30px;">
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="nom" checked>
-                                            <?php _e('Nom', 'gestion-adherents'); ?>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="prenom" checked>
-                                            <?php _e('Prénom', 'gestion-adherents'); ?>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="email" checked>
-                                            <?php _e('Email', 'gestion-adherents'); ?> 
-                                            <span style="color: #d63638;">*</span>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="numero_licence">
-                                            <?php _e('Numéro de licence', 'gestion-adherents'); ?>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="telephone">
-                                            <?php _e('Téléphone', 'gestion-adherents'); ?>
-                                            <span style="color: #d63638;">*</span>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="date_naissance">
-                                            <?php _e('Date de naissance', 'gestion-adherents'); ?>
-                                            <span style="color: #d63638;">*</span>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="adresse_complete">
-                                            <?php _e('Adresse complète', 'gestion-adherents'); ?>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="code_postal">
-                                            <?php _e('Code postal', 'gestion-adherents'); ?>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="ville">
-                                            <?php _e('Ville', 'gestion-adherents'); ?>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="date_adhesion" checked>
-                                            <?php _e('Date d\'adhésion', 'gestion-adherents'); ?>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="date_fin_adhesion">
-                                            <?php _e('Date de fin d\'adhésion', 'gestion-adherents'); ?>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="is_junior">
-                                            <?php _e('Statut Junior', 'gestion-adherents'); ?>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="is_pole_excellence">
-                                            <?php _e('Statut Pôle Excellence', 'gestion-adherents'); ?>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="status" checked>
-                                            <?php _e('Statut', 'gestion-adherents'); ?>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="wp_user_name">
-                                            <?php _e('Compte WordPress', 'gestion-adherents'); ?>
-                                        </label><br>
-                                        
-                                        <label>
-                                            <input type="checkbox" name="fields[]" value="created_at">
-                                            <?php _e('Date de création', 'gestion-adherents'); ?>
-                                        </label><br>
-                                    </div>
-                                    
-                                    <p class="description">
-                                        <span style="color: #d63638;">*</span> <?php _e('Données sensibles - Assurez-vous de respecter la confidentialité', 'gestion-adherents'); ?>
-                                    </p>
-                                </fieldset>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <p class="submit">
-                    <input type="submit" name="submit" class="button-primary" value="<?php _e('Télécharger l\'export', 'gestion-adherents'); ?>">
-                    <span class="description"><?php _e('L\'export peut prendre quelques secondes selon le nombre d\'adhérents.', 'gestion-adherents'); ?></span>
-                </p>
-            </form>
-            
-            <div class="notice notice-warning" style="margin-top: 30px;">
-                <p><strong><?php _e('Avertissement RGPD', 'gestion-adherents'); ?></strong></p>
-                <p><?php _e('Cet export contient des données personnelles. Assurez-vous de respecter la réglementation RGPD et de sécuriser le fichier téléchargé.', 'gestion-adherents'); ?></p>
+                <p><strong><?php _e('Fonctionnalité en développement', 'gestion-adherents'); ?></strong></p>
+                <p><?php _e('L\'export CSV/Excel sera disponible dans une prochaine version du plugin.', 'gestion-adherents'); ?></p>
+                <p><?php _e('En attendant, vous pouvez consulter et gérer vos adhérents depuis la liste principale.', 'gestion-adherents'); ?></p>
             </div>
         </div>
-        
-        <style>
-        .ga-export-form fieldset {
-            border: none;
-            padding: 0;
-        }
-        .ga-export-form label {
-            display: block;
-            margin-bottom: 8px;
-        }
-        .ga-export-form .description {
-            color: #646970;
-            font-style: italic;
-        }
-        </style>
         <?php
     }
-    
-    /**
-     * Traitement de l'export
-     */
-    private function process_export() {
-        // Vérifier les permissions
-        if (!current_user_can('manage_options')) {
-            wp_die(__('Permissions insuffisantes.', 'gestion-adherents'));
-        }
-        
-        $format = sanitize_text_field($_POST['export_format']);
-        $statuses = isset($_POST['statuses']) ? array_map('sanitize_text_field', $_POST['statuses']) : array('active');
-        $fields = isset($_POST['fields']) ? array_map('sanitize_text_field', $_POST['fields']) : array();
-        
-        if (empty($fields)) {
-            echo '<div class="notice notice-error"><p>' . __('Veuillez sélectionner au moins un champ à exporter.', 'gestion-adherents') . '</p></div>';
-            return;
-        }
-        
-        // Récupérer les données
-        $database = new GA_Database();
-        $export_data = $this->get_export_data($statuses, $fields);
-        
-        if (empty($export_data)) {
-            echo '<div class="notice notice-warning"><p>' . __('Aucune donnée à exporter avec les filtres sélectionnés.', 'gestion-adherents') . '</p></div>';
-            return;
-        }
-        
-        // Générer le fichier
-        $filename = 'adherents_export_' . date('Y-m-d_H-i-s');
-        
-        if ($format === 'xlsx') {
-            $this->export_excel($export_data, $filename);
-        } else {
-            $this->export_csv($export_data, $filename);
-        }
-    }
-    
-    /**
-     * Récupérer les statistiques pour l'export
-     */
-    private function get_export_stats() {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'adherents';
-        
-        $stats = array();
-        $stats['total'] = $wpdb->get_var("SELECT COUNT(*) FROM {$table_name}");
-        $stats['active'] = $wpdb->get_var("SELECT COUNT(*) FROM {$table_name} WHERE status = 'active'");
-        $stats['inactive'] = $wpdb->get_var("SELECT COUNT(*) FROM {$table_name} WHERE status = 'inactive'");
-        $stats['suspended'] = $wpdb->get_var("SELECT COUNT(*) FROM {$table_name} WHERE status = 'suspended'");
-        $stats['junior'] = $wpdb->get_var("SELECT COUNT(*) FROM {$table_name} WHERE is_junior = 1");
-        $stats['pole_excellence'] = $wpdb->get_var("SELECT COUNT(*) FROM {$table_name} WHERE is_pole_excellence = 1");
-        
-        return $stats;
-    }
-    
-    /**
-     * Récupérer les données pour l'export
-     */
-    private function get_export_data($statuses, $fields) {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'adherents';
-        
-        // Construire la clause WHERE
-        $where_conditions = array();
-        if (!empty($statuses)) {
-            $placeholders = implode(',', array_fill(0, count($statuses), '%s'));
-            $where_conditions[] = "status IN ($placeholders)";
-        }
-        
-        $where_clause = !empty($where_conditions) ? 'WHERE ' . implode(' AND ', $where_conditions) : '';
-        
-        // Requête principale
-        $sql = "
-            SELECT a.*, u.display_name as wp_user_name 
-            FROM {$table_name} a 
-            LEFT JOIN {$wpdb->users} u ON a.wp_user_id = u.ID 
-            {$where_clause}
-            ORDER BY a.nom, a.prenom
-        ";
-        
-        if (!empty($statuses)) {
-            $sql = $wpdb->prepare($sql, $statuses);
-        }
-        
-        $results = $wpdb->get_results($sql, ARRAY_A);
-        
-        // Filtrer les champs demandés
-        $filtered_data = array();
-        foreach ($results as $row) {
-            $filtered_row = array();
-            foreach ($fields as $field) {
-                switch ($field) {
-                    case 'adresse_complete':
-                        $adresse_parts = array_filter(array(
-                            $row['adresse_1'],
-                            $row['adresse_2'], 
-                            $row['adresse_3']
-                        ));
-                        $filtered_row['Adresse complète'] = implode(', ', $adresse_parts);
-                        break;
-                    case 'is_junior':
-                        $filtered_row['Junior'] = $row['is_junior'] ? 'Oui' : 'Non';
-                        break;
-                    case 'is_pole_excellence':
-                        $filtered_row['Pôle Excellence'] = $row['is_pole_excellence'] ? 'Oui' : 'Non';
-                        break;
-                    case 'status':
-                        $status_labels = array(
-                            'active' => 'Actif',
-                            'inactive' => 'Inactif', 
-                            'suspended' => 'Suspendu'
-                        );
-                        $filtered_row['Statut'] = $status_labels[$row['status']] ?? $row['status'];
-                        break;
-                    default:
-                        $field_labels = array(
-                            'nom' => 'Nom',
-                            'prenom' => 'Prénom',
-                            'email' => 'Email',
-                            'numero_licence' => 'Numéro de licence',
-                            'telephone' => 'Téléphone',
-                            'date_naissance' => 'Date de naissance',
-                            'code_postal' => 'Code postal',
-                            'ville' => 'Ville',
-                            'date_adhesion' => 'Date d\'adhésion',
-                            'date_fin_adhesion' => 'Date de fin d\'adhésion',
-                            'wp_user_name' => 'Compte WordPress',
-                            'created_at' => 'Date de création'
-                        );
-                        $label = $field_labels[$field] ?? $field;
-                        $filtered_row[$label] = $row[$field] ?? '';
-                        break;
-                }
-            }
-            $filtered_data[] = $filtered_row;
-        }
-        
-        return $filtered_data;
-    }
-    
-    /**
-     * Export CSV
-     */
-    private function export_csv($data, $filename) {
-        if (empty($data)) return;
-        
-        header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '.csv"');
-        header('Pragma: no-cache');
-        header('Expires: 0');
-        
-        $output = fopen('php://output', 'w');
-        
-        // BOM pour UTF-8
-        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
-        
-        // En-têtes
-        fputcsv($output, array_keys($data[0]), ';');
-        
-        // Données
-        foreach ($data as $row) {
-            fputcsv($output, $row, ';');
-        }
-        
-        fclose($output);
-        exit;
-    }
-    
-    /**
-     * Export Excel (version basique)
-     */
-    private function export_excel($data, $filename) {
-        if (empty($data)) return;
-        
-        // Pour une version basique, on génère du HTML qui s'ouvre dans Excel
-        header('Content-Type: application/vnd.ms-excel; charset=utf-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '.xls"');
-        header('Pragma: no-cache');
-        header('Expires: 0');
-        
-        echo '<html><head><meta charset="utf-8"></head><body>';
-        echo '<table border="1">';
-        
-        // En-têtes
-        echo '<tr>';
-        foreach (array_keys($data[0]) as $header) {
-            echo '<th>' . htmlspecialchars($header) . '</th>';
-        }
-        echo '</tr>';
-        
-        // Données
-        foreach ($data as $row) {
-            echo '<tr>';
-            foreach ($row as $cell) {
-                echo '<td>' . htmlspecialchars($cell) . '</td>';
-            }
-            echo '</tr>';
-        }
-        
-        echo '</table>';
-        echo '</body></html>';
-        exit;
-    }
+}

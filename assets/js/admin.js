@@ -1,4 +1,4 @@
-/* assets/js/admin.js - VERSION COMPLÈTE CORRIGÉE */
+/* assets/js/admin.js */
 
 (function($) {
     'use strict';
@@ -23,8 +23,8 @@
             // Suppression d'adhérent
             $(document).on('click', '.ga-delete-adherent', this.confirmDelete);
             
-            // Soumission de formulaire via AJAX (optionnel)
-            $('.ga-adherent-form.ga-ajax-form').on('submit', this.handleFormSubmit);
+            // Soumission de formulaire via AJAX
+            $('.ga-adherent-form').on('submit', this.handleFormSubmit);
             
             // Recherche en temps réel (avec délai)
             var searchTimeout;
@@ -32,7 +32,7 @@
                 clearTimeout(searchTimeout);
                 var $form = $(this).closest('form');
                 searchTimeout = setTimeout(function() {
-                    // Auto-submit après 500ms d'inactivité (optionnel)
+                    // Auto-submit après 500ms d'inactivité
                     // $form.submit();
                 }, 500);
             });
@@ -54,11 +54,6 @@
             
             // Confirmation avant export important
             $('.ga-export-form').on('submit', this.confirmExport);
-            
-            // Auto-dismiss des notices après 5 secondes
-            setTimeout(function() {
-                $('.notice.is-dismissible').not('.persistent').fadeOut();
-            }, 5000);
         },
         
         /**
@@ -152,7 +147,7 @@
         },
         
         /**
-         * Gestion de soumission de formulaire AJAX (optionnel)
+         * Gestion de soumission de formulaire
          */
         handleFormSubmit: function(e) {
             var $form = $(this);
@@ -275,7 +270,7 @@
             var codePostal = $codePostal.val();
             
             if (codePostal && codePostal.length === 5 && /^\d{5}$/.test(codePostal)) {
-                // API française des codes postaux (exemple avec api-adresse.data.gouv.fr)
+                // API française des codes postaux
                 $.ajax({
                     url: 'https://api-adresse.data.gouv.fr/search/',
                     data: {
