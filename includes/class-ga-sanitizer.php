@@ -1,9 +1,9 @@
 <?php
 /**
- * Classe de nettoyage des données
+ * Classe de nettoyage des données - VERSION CORRIGÉE
  * 
  * @package GestionAdherents
- * @version 1.0.0
+ * @version 1.1.2
  */
 
 // Sécurité : empêcher l'accès direct
@@ -41,26 +41,42 @@ class GA_Sanitizer {
         }
         
         // Numéro de licence
-        if (isset($data['numero_licence']) && !empty($data['numero_licence'])) {
-            // Nettoyer et convertir en majuscules
-            $sanitized['numero_licence'] = strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $data['numero_licence']));
+        if (isset($data['numero_licence'])) {
+            if (empty($data['numero_licence']) || trim($data['numero_licence']) === '') {
+                $sanitized['numero_licence'] = null;
+            } else {
+                // Nettoyer et convertir en majuscules
+                $sanitized['numero_licence'] = strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $data['numero_licence']));
+            }
         }
         
         // Dates
         $date_fields = array('date_naissance', 'date_adhesion', 'date_fin_adhesion');
         foreach ($date_fields as $field) {
-            if (isset($data[$field]) && !empty($data[$field])) {
-                $sanitized[$field] = sanitize_text_field($data[$field]);
+            if (isset($data[$field])) {
+                if (empty($data[$field]) || trim($data[$field]) === '') {
+                    $sanitized[$field] = null;
+                } else {
+                    $sanitized[$field] = sanitize_text_field($data[$field]);
+                }
             }
         }
         
         // Téléphone et code postal
         if (isset($data['telephone'])) {
-            $sanitized['telephone'] = preg_replace('/[^0-9+\s\.-]/', '', $data['telephone']);
+            if (empty($data['telephone']) || trim($data['telephone']) === '') {
+                $sanitized['telephone'] = null;
+            } else {
+                $sanitized['telephone'] = preg_replace('/[^0-9+\s\.-]/', '', $data['telephone']);
+            }
         }
         
         if (isset($data['code_postal'])) {
-            $sanitized['code_postal'] = preg_replace('/[^0-9]/', '', $data['code_postal']);
+            if (empty($data['code_postal']) || trim($data['code_postal']) === '') {
+                $sanitized['code_postal'] = null;
+            } else {
+                $sanitized['code_postal'] = preg_replace('/[^0-9]/', '', $data['code_postal']);
+            }
         }
         
         // Booléens
@@ -69,7 +85,7 @@ class GA_Sanitizer {
         
         // Utilisateur WordPress
         if (isset($data['wp_user_id'])) {
-            if (empty($data['wp_user_id']) || $data['wp_user_id'] === '') {
+            if (empty($data['wp_user_id']) || $data['wp_user_id'] === '' || $data['wp_user_id'] === '0') {
                 $sanitized['wp_user_id'] = null; // Délier explicitement
             } else {
                 $sanitized['wp_user_id'] = intval($data['wp_user_id']);
